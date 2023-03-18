@@ -7,8 +7,10 @@ using UnityEngine.UIElements;
 public class Candy : MonoBehaviour
 {
     int _x, _y;
+    bool isChecked = false;
 
     public bool CandyCanFall { get; set; }
+
 
     [SerializeField] CandySpawner _candySpawner;
 
@@ -23,6 +25,19 @@ public class Candy : MonoBehaviour
         {
             FallForCandy();
         }
+    }
+    private void OnMouseDown()
+    {
+        //Debug.Log($"Gameobject: {gameObject.name}\ncoordinates: {_x}-{_y}");
+        //--------------------------------------------TODO-----------------------------------------------
+        // TODO: seç ve patlat... !!! 
+        isChecked = true;
+
+
+        CheckEveryDirections(_x, _y);
+
+        Destroy(gameObject);
+        _candySpawner.CandiesLocations[_x, _y] = null;
     }
 
     public void InstantiateCandy(int x, int y)
@@ -42,29 +57,34 @@ public class Candy : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
-    {
-        //Debug.Log($"Gameobject: {gameObject.name}\ncoordinates: {_x}-{_y}");
-        //--------------------------------------------TODO-----------------------------------------------
-        // TODO: seç ve patlat... !!! 
-
-        CheckForMatches(_x, _y + 1);
-        CheckForMatches(_x, _y - 1);
-        CheckForMatches(_x + 1, _y);
-        CheckForMatches(_x - 1, _y);
-
-        Destroy(gameObject);
-        _candySpawner.CandiesLocations[_x, _y] = null;
-
-    }
-
     private void CheckForMatches(int x, int y)
     {
         if (y <= _candySpawner.Height - 1 && y >= 0)
+        {
             if (x <= _candySpawner.Width - 1 && x >= 0)
             {
-                Destroy(_candySpawner.CandiesLocations[x, y]);
-                _candySpawner.CandiesLocations[x, y] = null;
+                GameObject otherCandy = _candySpawner.CandiesLocations[x, y];
+                if (otherCandy != null)
+                {
+                    if (otherCandy.GetComponent<Candy>().isChecked != true)
+                    {
+                        if (otherCandy.CompareTag(gameObject.tag))
+                        {
+                            otherCandy.GetComponent<Candy>().isChecked = true;
+                            otherCandy.GetComponent<Candy>().CheckEveryDirections(x, y);
+                            Destroy(otherCandy);
+                            _candySpawner.CandiesLocations[x, y] = null;
+                        }
+                    }
+                }
             }
+        }
+    }
+    private void CheckEveryDirections(int x, int y)
+    {
+        CheckForMatches(x, y + 1);//1,2 
+        CheckForMatches(x, y - 1);//1,0 // 1,1
+        CheckForMatches(x + 1, y);//2,1
+        CheckForMatches(x - 1, y);//0,1
     }
 }

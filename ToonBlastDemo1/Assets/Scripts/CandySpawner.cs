@@ -7,6 +7,7 @@ public class CandySpawner : MonoBehaviour
     [SerializeField] GameObject[,] _candiesLocations;
     [SerializeField] GameObject[] _candies;
     [SerializeField] int _height, _width;
+    [SerializeField] Transform _candiesParent;
 
     public GameObject[,] CandiesLocations => _candiesLocations;
     public int Height => _height;
@@ -29,7 +30,7 @@ public class CandySpawner : MonoBehaviour
 
     private void SpawnRandomCandy(int x, int y)
     {
-        GameObject newCandy = Instantiate(_candies[Random.Range(0, _candies.Length)], new Vector2(x, y + 10), Quaternion.identity);
+        GameObject newCandy = Instantiate(_candies[Random.Range(0, _candies.Length)], new Vector2(x, y + 10), Quaternion.identity,_candiesParent);
 
         Candy newCandyScript = newCandy.GetComponent<Candy>();
         newCandyScript.InstantiateCandy(x, y); //from Candy script
