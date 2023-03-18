@@ -28,11 +28,10 @@ public class Candy : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        //Debug.Log($"Gameobject: {gameObject.name}\ncoordinates: {_x}-{_y}");
-        //--------------------------------------------TODO-----------------------------------------------
-        // TODO: seç ve patlat... !!! 
+        if (!_candySpawner.IsSpawnDone)
+            return;
+        
         isChecked = true;
-
 
         CheckEveryDirections(_x, _y);
 
@@ -70,7 +69,7 @@ public class Candy : MonoBehaviour
                     {
                         if (otherCandy.CompareTag(gameObject.tag))
                         {
-                            otherCandy.GetComponent<Candy>().isChecked = true;
+                            otherCandy.GetComponent<Candy>().isChecked = true;//bir sonraki þekerin deðerleri deðiþtiriliyor.
                             otherCandy.GetComponent<Candy>().CheckEveryDirections(x, y);
                             Destroy(otherCandy);
                             _candySpawner.CandiesLocations[x, y] = null;
