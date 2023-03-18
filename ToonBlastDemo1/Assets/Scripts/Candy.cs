@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,11 @@ public class Candy : MonoBehaviour
 
     public bool CandyCanFall { get; set; }
 
-    public void InstantiateCandy(int x, int y)
+    [SerializeField] CandySpawner _candySpawner;
+
+    private void Awake()
     {
-        _x = x;
-        _y = y;
-        StartCoroutine(StartFalling());
+        _candySpawner = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CandySpawner>();
     }
 
     private void Update()
@@ -24,27 +25,46 @@ public class Candy : MonoBehaviour
         }
     }
 
+    public void InstantiateCandy(int x, int y)
+    {
+        _x = x;
+        _y = y;
+    }
+
     private void FallForCandy()
     {
-        if (Vector2.Distance(transform.position, new Vector2(_y, _x)) >= .005f)
-            transform.position = Vector2.Lerp(transform.position, new Vector2(_y, _x), 3 * Time.deltaTime);
+        if (Vector2.Distance(transform.position, new Vector2(_x, _y)) >= .005f)
+            transform.position = Vector2.Lerp(transform.position, new Vector2(_x, _y), 3 * Time.deltaTime);
         else
         {
-            transform.position = new Vector2(_y, _x);
+            transform.position = new Vector2(_x, _y);
             CandyCanFall = false;
         }
     }
 
-    IEnumerator StartFalling()
-    {
-        yield return new WaitForSeconds(1);
-        FallForCandy();
-    }
-
     private void OnMouseDown()
     {
-        //Debug.Log($"Gameobject name is {gameObject.name} and its coordinates are {_y}-{_x}");
+        //Debug.Log($"Gameobject: {gameObject.name}\ncoordinates: {_x}-{_y}");
         //--------------------------------------------TODO-----------------------------------------------
         // TODO: seç ve patlat... !!! 
+
+        CheckForMatches(_x, _y + 1);
+        CheckForMatches(_x, _y - 1);
+        CheckForMatches(_x + 1, _y);
+        CheckForMatches(_x - 1, _y);
+
+        Destroy(gameObject);
+        _candySpawner.CandiesLocations[_x, _y] = null;
+
+    }
+
+    private void CheckForMatches(int x, int y)
+    {
+        if (y <= _candySpawner.Height - 1 && y >= 0)
+            if (x <= _candySpawner.Width - 1 && x >= 0)
+            {
+                Destroy(_candySpawner.CandiesLocations[x, y]);
+                _candySpawner.CandiesLocations[x, y] = null;
+            }
     }
 }

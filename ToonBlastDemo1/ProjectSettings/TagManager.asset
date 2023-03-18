@@ -8,6 +8,7 @@ TagManager:
   - Candy2
   - Candy3
   - Candy4
+  - GameManager
   layers:
   - Default
   - TransparentFX
