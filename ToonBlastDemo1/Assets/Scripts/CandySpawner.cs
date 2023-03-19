@@ -43,7 +43,6 @@ public class CandySpawner : MonoBehaviour
 
     IEnumerator SpawnerTimer()
     {
-
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
@@ -56,5 +55,6 @@ public class CandySpawner : MonoBehaviour
         IsSpawnDone = true;
     }
 
+    // TODO: ReInitiate
     // TODO: rocket bomb and combos
 }

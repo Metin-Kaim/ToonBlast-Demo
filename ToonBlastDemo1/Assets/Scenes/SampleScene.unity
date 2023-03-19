@@ -188,7 +188,7 @@ MonoBehaviour:
   - {fileID: 5780666674295828889, guid: 34c55c39b1cfac44ca31172c8c104412, type: 3}
   - {fileID: 7167425892931913980, guid: 5e0a8e275d754d546b942be3e77b4d7a, type: 3}
   - {fileID: 1135728098028423593, guid: 8d9e21b0e92f8fb4fa8d4a9c5d494a11, type: 3}
-  _height: 5
+  _height: 7
   _width: 5
   _candiesParent: {fileID: 85590351}
 --- !u!4 &1093223830
@@ -227,7 +227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5336284319277149443, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.67
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5336284319277149443, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: m_LocalPosition.z
@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6720465142670754573, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: far clip plane
-      value: 5
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6720465142670754573, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: near clip plane
@@ -303,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6720465142670754802, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 6720465142670754802, guid: d3fd162eca4c0f94188cdd86e8d9cd67, type: 3}
       propertyPath: m_LocalRotation.x
