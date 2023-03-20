@@ -29,7 +29,7 @@ public class CandySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnRandomCandy(int x, int y)
+    public void SpawnRandomCandy(int x, int y)
     {
         GameObject newCandy = Instantiate(_candies[Random.Range(0, _candies.Length)], new Vector2(x, y + 10), Quaternion.identity, _candiesParent);
 
@@ -38,7 +38,7 @@ public class CandySpawner : MonoBehaviour
 
         newCandyScript.CandyCanFall = true;
 
-        _candiesLocations[x, y] = newCandy;
+        //_candiesLocations[x, y] = newCandy;
     }
 
     IEnumerator SpawnerTimer()

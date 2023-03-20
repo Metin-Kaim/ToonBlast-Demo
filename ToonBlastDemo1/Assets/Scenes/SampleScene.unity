@@ -219,7 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382cd01d72c2e944f8a4594e7e06b220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _candySpawner: {fileID: 0}
 --- !u!1001 &6720465142577675122
 PrefabInstance:
   m_ObjectHideFlags: 0
