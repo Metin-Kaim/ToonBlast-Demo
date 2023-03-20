@@ -13,6 +13,7 @@ public class Candy : MonoBehaviour
 
     public bool CandyCanFall { get; set; }
     public bool IsChecked => _isChecked;
+    public bool IsSelected { get; set; }
 
 
     [SerializeField] CandySpawner _candySpawner;
@@ -24,17 +25,6 @@ public class Candy : MonoBehaviour
 
     private void Update()
     {
-        //if(_isChecked)
-        //{
-        //    GameObject upperCandy = _candySpawner.CandiesLocations[_x, _y + 1];//kendinin bir üstündeki þeker
-        //    if(upperCandy != null)
-        //    {
-        //        if (upperCandy.GetComponent<Candy>().IsChecked)
-        //            return;
-        //        upperCandy.GetComponent<Candy>().FallForCandy(_x, _y);
-        //    }
-        //}
-
         if (CandyCanFall)
         {
             FallForCandy(_x, _y);
@@ -53,36 +43,13 @@ public class Candy : MonoBehaviour
 
         CheckEveryDirections(_x, _y, _chosenCandies);
 
-        //ilgili þekere ait tüm eþleþmeler kontrol edildiðinde burasý çalisacak.
-        //liste dolu.
-        if (_chosenCandies.Count > 1) //candies will explode
+        //ilgili sekerle ayný yapida olan sekerler belirlenip listeye alindi. (_chosenCandies)
+
+        if (_chosenCandies.Count > 1) // candies will explode
         {
-            foreach (var candy in _chosenCandies)
-            {
-                //GameObject upperCandy;
-                //int i = 0;
-                //do
-                //{
-                //    i++;
-                //    upperCandy = _candySpawner.CandiesLocations[candy[0], candy[1] + i];//seçilen þekerin bir üst þekerini aldýk.
-
-                //} while (gameObject.CompareTag(upperCandy.tag));
-
-
-                GameObject upperCandy = null;
-
-                for (int i = 1; i < _candySpawner.Height - candy[1]; i++)
-                {
-                    upperCandy = _candySpawner.CandiesLocations[candy[0], candy[1] + i];
-                    _candySpawner.CandiesLocations[candy[0], candy[1] + i] = null;
-                    upperCandy.GetComponent<Candy>().InstantiateCandy(candy[0], candy[1] + i - 1);
-                    upperCandy.GetComponent<Candy>().CandyCanFall = true;
-                }
-
-                //Destroy(_candySpawner.CandiesLocations[candy[0], candy[1]]);
-            }
+            GameManager.Instance.CandiesDestroyNFall(_chosenCandies);
         }
-        else // candies will not
+        else // candies will not explode
         {
             _isChecked = false;
         }
@@ -119,7 +86,7 @@ public class Candy : MonoBehaviour
                     {
                         if (otherCandy.CompareTag(gameObject.tag))
                         {
-                            otherCandy.GetComponent<Candy>()._isChecked = true;//bir sonraki þekerin deðerleri deðiþtiriliyor.
+                            otherCandy.GetComponent<Candy>()._isChecked = true;//bir sonraki sekerin degerleri degistiriliyor.
 
                             chosenCandies.Add(new List<int> { x, y }); // eslesen her sekeri listeye ekleme.
 
