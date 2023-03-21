@@ -189,8 +189,6 @@ MonoBehaviour:
   - {fileID: 5780666674295828889, guid: 34c55c39b1cfac44ca31172c8c104412, type: 3}
   - {fileID: 7167425892931913980, guid: 5e0a8e275d754d546b942be3e77b4d7a, type: 3}
   - {fileID: 1135728098028423593, guid: 8d9e21b0e92f8fb4fa8d4a9c5d494a11, type: 3}
-  _height: 7
-  _width: 5
   _candiesParent: {fileID: 85590351}
 --- !u!4 &1093223830
 Transform:
@@ -219,6 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382cd01d72c2e944f8a4594e7e06b220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _height: 7
+  _width: 5
 --- !u!1001 &6720465142577675122
 PrefabInstance:
   m_ObjectHideFlags: 0

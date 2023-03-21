@@ -7,21 +7,14 @@ using UnityEngine.UIElements;
 public class Candy : MonoBehaviour
 {
     int _x, _y;
-    bool _isChecked = false;
 
-    static List<List<int>> _chosenCandies = new();
+    public bool isComboCheck;
 
+    public static List<List<int>> _chosenCandies = new();
     public bool CandyCanFall { get; set; }
-    public bool IsChecked => _isChecked;
+    public bool IsChecked { get; set; }
     public bool IsSelected { get; set; }
 
-
-    [SerializeField] CandySpawner _candySpawner;
-
-    private void Awake()
-    {
-        _candySpawner = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CandySpawner>();
-    }
 
     private void Update()
     {
@@ -32,18 +25,12 @@ public class Candy : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (!_candySpawner.IsSpawnDone)
+        if (!GameManager.Instance.CanClick)
             return;
 
-        _chosenCandies.Clear();
+        GameManager.Instance.CanClick = false;
 
-        _isChecked = true;//dikkat et
-
-        _chosenCandies.Add(new List<int> { _x, _y }); // secilen ilk sekerin koordinatlarý alindi.
-
-        CheckEveryDirections(_x, _y, _chosenCandies);
-
-        //ilgili sekerle ayný yapida olan sekerler belirlenip listeye alindi. (_chosenCandies)
+        CallForCheck(); //ilgili sekerle ayný yapida olan sekerler belirlenip listeye alindi. (_chosenCandies)
 
         if (_chosenCandies.Count > 1) // candies will explode
         {
@@ -51,7 +38,8 @@ public class Candy : MonoBehaviour
         }
         else // candies will not explode
         {
-            _isChecked = false;
+            GameManager.Instance.CanClick = true;
+            IsChecked = false;
         }
     }
 
@@ -59,7 +47,7 @@ public class Candy : MonoBehaviour
     {
         _x = x;
         _y = y;
-        _candySpawner.CandiesLocations[x, y] = gameObject;
+        GameManager.Instance.CandiesLocations[x, y] = gameObject;
     }
 
     private void FallForCandy(int x, int y)
@@ -75,18 +63,18 @@ public class Candy : MonoBehaviour
 
     private void CheckForMatches(int x, int y, List<List<int>> chosenCandies)
     {
-        if (y <= _candySpawner.Height - 1 && y >= 0)
+        if (y <= GameManager.Instance.Height - 1 && y >= 0)//check for bounds
         {
-            if (x <= _candySpawner.Width - 1 && x >= 0)
+            if (x <= GameManager.Instance.Width - 1 && x >= 0)//check for bounds
             {
-                GameObject otherCandy = _candySpawner.CandiesLocations[x, y];
+                GameObject otherCandy = GameManager.Instance.CandiesLocations[x, y];
                 if (otherCandy != null)
                 {
-                    if (otherCandy.GetComponent<Candy>()._isChecked != true)
+                    if (otherCandy.GetComponent<Candy>().IsChecked != true)
                     {
                         if (otherCandy.CompareTag(gameObject.tag))
                         {
-                            otherCandy.GetComponent<Candy>()._isChecked = true;//bir sonraki sekerin degerleri degistiriliyor.
+                            otherCandy.GetComponent<Candy>().IsChecked = true;//bir sonraki sekerin degerleri degistiriliyor.
 
                             chosenCandies.Add(new List<int> { x, y }); // eslesen her sekeri listeye ekleme.
 
@@ -97,11 +85,23 @@ public class Candy : MonoBehaviour
             }
         }
     }
+
     private void CheckEveryDirections(int x, int y, List<List<int>> chosenCandies)
     {
-        CheckForMatches(x, y + 1, chosenCandies);//1,2 
-        CheckForMatches(x, y - 1, chosenCandies);//1,0 // 1,1
-        CheckForMatches(x + 1, y, chosenCandies);//2,1
-        CheckForMatches(x - 1, y, chosenCandies);//0,1
+        CheckForMatches(x, y + 1, chosenCandies);
+        CheckForMatches(x, y - 1, chosenCandies);
+        CheckForMatches(x + 1, y, chosenCandies);
+        CheckForMatches(x - 1, y, chosenCandies);
+    }
+
+    public void CallForCheck() // Herhangi bir sekilde sekerleri kontrol etmek ve ayni turde olan sekerler uzerinde islem yapmak icin gerekli adimlari bulunduran method
+    {
+        _chosenCandies.Clear();//Listeyi temizle
+
+        IsChecked = true;//kontrol edilen sekeri isaretle
+
+        _chosenCandies.Add(new List<int> { _x, _y }); // secilen ilk sekerin koordinatlarýný al
+
+        CheckEveryDirections(_x, _y, _chosenCandies);
     }
 }

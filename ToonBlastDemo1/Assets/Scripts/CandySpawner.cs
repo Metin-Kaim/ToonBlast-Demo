@@ -4,29 +4,13 @@ using UnityEngine;
 
 public class CandySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject[,] _candiesLocations;
     [SerializeField] GameObject[] _candies;
-    [SerializeField] int _height, _width;
-    [SerializeField] Transform _candiesParent;
 
-    public GameObject[,] CandiesLocations => _candiesLocations;
-    public int Height => _height;
-    public int Width => _width;
-    public bool IsSpawnDone { get; private set; }
+    [SerializeField] Transform _candiesParent;
 
     private void Start()
     {
-        _candiesLocations = new GameObject[_width, _height];
-
         StartCoroutine(SpawnerTimer());
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.K))
-        {
-            Destroy(CandiesLocations[0, 2]);
-        }
     }
 
     public void SpawnRandomCandy(int x, int y)
@@ -37,24 +21,21 @@ public class CandySpawner : MonoBehaviour
         newCandyScript.InstantiateCandy(x, y); //from Candy script
 
         newCandyScript.CandyCanFall = true;
-
-        //_candiesLocations[x, y] = newCandy;
     }
 
     IEnumerator SpawnerTimer()
     {
-        for (int x = 0; x < _width; x++)
+        for (int x = 0; x < GameManager.Instance.Width; x++)
         {
-            for (int y = 0; y < _height; y++)
+            for (int y = 0; y < GameManager.Instance.Height; y++)
             {
                 yield return new WaitForSeconds(.05f);
                 SpawnRandomCandy(x, y);
             }
         }
-        yield return new WaitForSeconds(2f);
-        IsSpawnDone = true;
-    }
 
-    // TODO: ReInitiate
-    // TODO: rocket bomb and combos
+        GameManager.Instance.CheckForCombos();
+
+        StartCoroutine(GameManager.Instance.ClickCoolDown(2.5f));
+    }
 }

@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b102401eb0aa1e45bf50c5fd70ff522, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _candySpawner: {fileID: 0}
+  isComboCheck: 0
 --- !u!61 &-8499265526852196086
 BoxCollider2D:
   m_ObjectHideFlags: 0
