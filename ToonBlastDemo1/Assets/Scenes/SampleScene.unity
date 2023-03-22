@@ -189,6 +189,8 @@ MonoBehaviour:
   - {fileID: 5780666674295828889, guid: 34c55c39b1cfac44ca31172c8c104412, type: 3}
   - {fileID: 7167425892931913980, guid: 5e0a8e275d754d546b942be3e77b4d7a, type: 3}
   - {fileID: 1135728098028423593, guid: 8d9e21b0e92f8fb4fa8d4a9c5d494a11, type: 3}
+  _candyRocket: {fileID: 2693915225901933953, guid: 35763f7b3f96084408cd8af27b78ed97, type: 3}
+  _candyBomb: {fileID: 6139867325613636932, guid: f81846c3de898594ea8f62c9b5175a42, type: 3}
   _candiesParent: {fileID: 85590351}
 --- !u!4 &1093223830
 Transform:

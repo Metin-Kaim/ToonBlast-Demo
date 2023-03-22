@@ -35,23 +35,14 @@ public class GameManager : MonoBehaviour
         SpawnNewCandies(chosenCandies);
         CheckForCombos();
     }
-
-    private void SpawnNewCandies(List<List<int>> chosenCandies)
+    private void DestroyAllChosenCandies(List<List<int>> chosenCandies)
     {
         foreach (var candies in chosenCandies)
         {
-            for (int i = 0; i < Height - candies[1]; i++)// secilen sekerin ustundeki tum sekerlere tek tek erisim
-            {
-                GameObject upperCandy = CandiesLocations[candies[0], candies[1] + i];//bir ust sekere erisim. !Once kendi yerine bakiyor. 
-                if (upperCandy == null)
-                {
-                    _candySpawner.SpawnRandomCandy(candies[0], candies[1] + i);
-                    break;
-                }
-            }
+            Destroy(CandiesLocations[candies[0], candies[1]]);
+            CandiesLocations[candies[0], candies[1]] = null;
         }
     }
-
     private void FallUpperCandies(List<List<int>> chosenCandies)
     {
         foreach (var candies in chosenCandies)
@@ -77,20 +68,23 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    private void DestroyAllChosenCandies(List<List<int>> chosenCandies)
+    private void SpawnNewCandies(List<List<int>> chosenCandies)
     {
         foreach (var candies in chosenCandies)
         {
-            Destroy(CandiesLocations[candies[0], candies[1]]);
-            CandiesLocations[candies[0], candies[1]] = null;
+            for (int i = 0; i < Height - candies[1]; i++)// secilen sekerin ustundeki tum sekerlere tek tek erisim
+            {
+                GameObject upperCandy = CandiesLocations[candies[0], candies[1] + i];//bir ust sekere erisim. !Once kendi yerine bakiyor. 
+                if (upperCandy == null)
+                {
+                    _candySpawner.SpawnRandomCandy(candies[0], candies[1] + i);
+                    break;
+                }
+            }
         }
     }
-
-
     public void CheckForCombos()
     {
-        //CanClick = false;
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
@@ -101,12 +95,12 @@ public class GameManager : MonoBehaviour
                 {
                     currentCandy.CallForCheck();
                     //ilgili sekere ait eslesen sekerlerin listesi olustu
-                    if (Candy._chosenCandies.Count > 5)//bomb
+                    if (Candy._chosenCandies.Count >= 7)//bomb
                         foreach (var candies in Candy._chosenCandies)
                         {
                             CandiesLocations[candies[0], candies[1]].GetComponent<SpriteRenderer>().color = Color.red;
                         }
-                    else if (Candy._chosenCandies.Count > 3)//rocket
+                    else if (Candy._chosenCandies.Count >= 5)//rocket
                         foreach (var candies in Candy._chosenCandies)
                         {
                             CandiesLocations[candies[0], candies[1]].GetComponent<SpriteRenderer>().color = Color.blue;
@@ -125,7 +119,6 @@ public class GameManager : MonoBehaviour
         }
         IsCheckCleaner();
         StartCoroutine(ClickCoolDown(.4f));
-        //CanClick = true;
     }
     public void IsCheckCleaner()
     {

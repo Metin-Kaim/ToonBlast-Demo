@@ -1,20 +1,14 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Candy : MonoBehaviour
 {
     int _x, _y;
-
     public bool isComboCheck;
 
     public static List<List<int>> _chosenCandies = new();
     public bool CandyCanFall { get; set; }
     public bool IsChecked { get; set; }
-    public bool IsSelected { get; set; }
-
 
     private void Update()
     {
