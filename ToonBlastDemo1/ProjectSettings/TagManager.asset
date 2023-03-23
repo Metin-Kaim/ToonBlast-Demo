@@ -9,6 +9,7 @@ TagManager:
   - Candy3
   - Candy4
   - GameManager
+  - Bomb
   layers:
   - Default
   - TransparentFX

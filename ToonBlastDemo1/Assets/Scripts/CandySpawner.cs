@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CandySpawner : MonoBehaviour
@@ -7,6 +6,8 @@ public class CandySpawner : MonoBehaviour
     [SerializeField] GameObject[] _candies;
 
     [SerializeField] Transform _candiesParent;
+
+    public Transform CandiesParent => _candiesParent;
 
     private void Start()
     {

@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] int _height, _width;
+    [SerializeField] GameObject _bomb;
 
     CandySpawner _candySpawner;
     GameObject[,] _candiesLocations;
@@ -31,17 +32,33 @@ public class GameManager : MonoBehaviour
     public void CandiesDestroyNFall(List<List<int>> chosenCandies)
     {
         DestroyAllChosenCandies(chosenCandies);
+        StartCoroutine(Devasm(chosenCandies));
+    }
+    IEnumerator Devasm(List<List<int>> chosenCandies)
+    {
+        yield return new WaitForSeconds(.2f);
         FallUpperCandies(chosenCandies);
         SpawnNewCandies(chosenCandies);
         CheckForCombos();
     }
     private void DestroyAllChosenCandies(List<List<int>> chosenCandies)
     {
+        bool isBomb = _candiesLocations[chosenCandies[0][0], chosenCandies[0][1]].CompareTag("Bomb") ? true : false;
         foreach (var candies in chosenCandies)
         {
-            Destroy(CandiesLocations[candies[0], candies[1]]);
+            CandiesLocations[candies[0], candies[1]].GetComponent<Animator>().SetTrigger("isExplode");
+
+            Destroy(CandiesLocations[candies[0], candies[1]],.3f);
             CandiesLocations[candies[0], candies[1]] = null;
         }
+
+        if (chosenCandies.Count >= 7 && !isBomb)
+        {
+            GameObject bomb = Instantiate(_bomb, new Vector3(chosenCandies[0][0], chosenCandies[0][1], 0), Quaternion.identity, _candySpawner.CandiesParent);
+            bomb.GetComponent<AbsEntity>().InstantiateCandy(chosenCandies[0][0], chosenCandies[0][1]);
+            chosenCandies.Remove(chosenCandies[0]);
+        }
+
     }
     private void FallUpperCandies(List<List<int>> chosenCandies)
     {
@@ -56,8 +73,8 @@ public class GameManager : MonoBehaviour
                     GameObject upperCandy = CandiesLocations[candies[0], candies[1] + i];//bir ust sekere erisim.
                     if (upperCandy != null)
                     {
-                        upperCandy.GetComponent<Candy>().InstantiateCandy(candies[0], candies[1] + i - 1 - sayac);
-                        upperCandy.GetComponent<Candy>().CandyCanFall = true;
+                        upperCandy.GetComponent<AbsEntity>().InstantiateCandy(candies[0], candies[1] + i - 1 - sayac);
+                        upperCandy.GetComponent<AbsEntity>().CandyCanFall = true;
                         CandiesLocations[candies[0], candies[1] + i] = null;
                     }
                     else
@@ -89,27 +106,22 @@ public class GameManager : MonoBehaviour
         {
             for (int x = 0; x < Width; x++)
             {
-                Candy currentCandy = CandiesLocations[x, y].GetComponent<Candy>();
+                AbsEntity currentCandy = CandiesLocations[x, y].GetComponent<AbsEntity>();
 
-                if (currentCandy.IsChecked == false)
+                if (currentCandy.IsChecked == false && !currentCandy.CompareTag("Bomb"))
                 {
                     currentCandy.CallForCheck();
                     //ilgili sekere ait eslesen sekerlerin listesi olustu
-                    if (Candy._chosenCandies.Count >= 7)//bomb
-                        foreach (var candies in Candy._chosenCandies)
+                    if (AbsEntity._chosenCandies.Count >= 7)//bomb
+                        foreach (var candies in AbsEntity._chosenCandies)
                         {
                             CandiesLocations[candies[0], candies[1]].GetComponent<SpriteRenderer>().color = Color.red;
                         }
-                    else if (Candy._chosenCandies.Count >= 5)//rocket
-                        foreach (var candies in Candy._chosenCandies)
-                        {
-                            CandiesLocations[candies[0], candies[1]].GetComponent<SpriteRenderer>().color = Color.blue;
-                        }
                     else
                     {
-                        foreach (var candies in Candy._chosenCandies)
+                        foreach (var candies in AbsEntity._chosenCandies)
                         {
-                            CandiesLocations[candies[0], candies[1]].GetComponent<Candy>().IsChecked = false;
+                            CandiesLocations[candies[0], candies[1]].GetComponent<AbsEntity>().IsChecked = false;
                             CandiesLocations[candies[0], candies[1]].GetComponent<SpriteRenderer>().color = Color.white;
 
                         }
@@ -126,7 +138,7 @@ public class GameManager : MonoBehaviour
         {
             for (int x = 0; x < Width; x++)
             {
-                CandiesLocations[x, y].GetComponent<Candy>().IsChecked = false;
+                CandiesLocations[x, y].GetComponent<AbsEntity>().IsChecked = false;
             }
         }
     }
