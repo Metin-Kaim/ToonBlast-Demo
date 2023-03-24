@@ -5,9 +5,12 @@ public class Bomb : AbsEntity
 {
     public override void CallForCheck()
     {
-        _chosenCandies.Clear();//Listeyi temizle
-
-        _chosenCandies.Add(new List<int> { _x, _y });
+        if (!IsChecked)
+        {
+            _chosenCandies.Clear();//Listeyi temizle
+            _chosenCandies.Add(new List<int> { _x, _y });
+            IsChecked = true;
+        }
 
         for (int i = -1; i < 2; i++)
         {
@@ -20,7 +23,19 @@ public class Bomb : AbsEntity
                         if (i == 0 && j == 0)
                             continue;
 
-                        _chosenCandies.Add(new List<int> { _x + i, _y + j });
+                        AbsEntity otherCandy = GameManager.Instance.CandiesLocations[_x + i, _y + j].GetComponent<AbsEntity>();
+                        if (!otherCandy.IsChecked)
+                        {
+                            otherCandy.IsChecked = true;
+                            _chosenCandies.Add(new List<int> { _x + i, _y + j });
+
+                            if (otherCandy.gameObject.CompareTag("Bomb"))
+                            {
+                                otherCandy.CallForCheck();
+                            }
+
+                        }
+
                     }
                 }
             }
